@@ -13,10 +13,13 @@
 <link
 	href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"
 	rel="stylesheet" />
+<script type="text/javascript"
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
 <script
 	src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
 <title>Insert title here</title>
 </head>
 <body>
@@ -82,7 +85,7 @@
 		<table class="table table-striped" id="list-user">
 			<thead>
 				<tr>
-
+             
 					<th><input type="checkbox" id="selectall" /></th>
 					<th class="sort">STT<i id="userId" class="fa fa-sort-asc"
 						aria-hidden="true"></i></th>
@@ -105,18 +108,34 @@
 
 			</tbody>
 		</table>
-		<select onchange="OnchanPage(this)">
-			<option value="5">5</option>
-			<option value="10">10</option>
-			<option value="15">15</option>
-		</select>
+		<div class="form-row">
+			<div class="form-group col-md-1">
+				<select onchange="OnchanPage(this)" class="form-control">
+					<option value="5">5</option>
+					<option value="10">10</option>
+					<option value="15">15</option>
+				</select>
+			</div>
+		</div>
 
 		<form>
-			<input id="Id" type="hidden"> <input id="Email" type="text">
-			<input id="Password" type="text">
+			<div class="row">
+				<input id="Id" type="hidden">
+				<div class="form-group col-md-4">
+					<input id="Email" type="text" class="form-control ">
+				</div>
+				<div class="form-group col-md-4">
+					<input id="Password" type="text" class="form-control ">
+				</div>
+				<div class="form-group col-md-4">
+					<button type="button" class="btn btn-info" onclick="addUser()">Save</button>
+					<input type="reset" class="btn btn-success" id="configreset"
+						value="Reset">
+				</div>
+			</div>
 
-			<button type="button" class="btn btn-info" onclick="addUser()">Save</button>
 		</form>
+
 	</div>
 	<div class="modal" id="myModal">
 		<div class="modal-dialog">
@@ -132,7 +151,7 @@
 				<div class="modal-body">
 					<form>
 						<div th:each="role: ${roles}">
-							<input id="roleId" type="checkbox" th:value="${role.roleId}">
+							<input class="roleId" type="checkbox" th:value="${role.roleId}" >
 							<span th:text="${role.name}"></span>
 						</div>
 
@@ -142,6 +161,7 @@
 
 				<!-- Modal footer -->
 				<div class="modal-footer">
+
 					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 				</div>
 
@@ -151,11 +171,13 @@
 	<script type="text/javascript">
 	
 	var tsort={sortName:"",sort:true,fullName:"",pageSize:5,roleId:"",status:""};
+	
 	var roles = [];
 	
 		$(document).ready(function() {
 			listUser();
-					    	
+			getRoles();
+			$('#form_id').trigger("reset");	    	
 		});
 		function filter(){	
 			tsort.status=$('#status').val();
@@ -244,7 +266,8 @@
 				contentType : "application/json; charset=utf-8",
 				success:function(data){
 					for(let i=0;i<data.roles.length;i++){
-						
+						console.log(data.roles[i].roleId);
+						$(".roleId").val(data.roles[i].roleId);
 					}
 										
 				}
@@ -264,7 +287,17 @@
 				}
 			})				
 		}
-		
+		function getRoles(userId){
+			$.ajax({
+				url:'http://localhost:8080/list-role',
+				method:'GET',
+				contentType : "application/json; charset=utf-8",
+				success:function(data){
+					console.log(data);
+										
+				}
+			})				
+		}
 		function deleteUser(userId) {
 			$.ajax({
 				url : 'http://localhost:8080/delete/' + userId,
@@ -312,7 +345,7 @@
 														+ user.status
 														+ "</td><td><button type='button' class='btn btn-danger' onClick='deleteUser("
 														+ user.userId
-														+ ")'>Delete</button><button type='button' class='btn btn-info' onClick='getUser("+ user.userId +")'>Edit</button><button type='button' class='btn btn-info' data-toggle='modal' data-target='#myModal' onClick='getRole("+ user.userId +")'>Edit Role</button>"
+														+ ")'>Delete</button><button type='button' class='btn btn-info' onClick='getUser("+ user.userId +")'>Edit</button><button type='button' class='btn btn-primary' data-toggle='modal' data-target='#myModal' onClick='getRole("+ user.userId +")'>Edit Role</button>"
 														+ "</td></tr>";
 
 												$("table tbody").append(
@@ -355,7 +388,7 @@
 														+ user.status
 														+ "</td><td><button type='button' class='btn btn-danger' onClick='deleteUser("
 														+ user.userId
-														+ ")'>Delete</button><button type='button' class='btn btn-info' onClick='getUser("+ user.userId +")'>Edit</button><button type='button' class='btn btn-info' data-toggle='modal' data-target='#myModal' onClick='getRole("+ user.userId +")'>Edit Role</button>"
+														+ ")'>Delete</button><button type='button' class='btn btn-info' onClick='getUser("+ user.userId +")'>Edit</button><button type='button' class='btn btn-primary' data-toggle='modal' data-target='#myModal' onClick='getRole("+ user.userId +")'>Edit Role</button>"
 														+ "</td></tr>";
 
 												$("table tbody").append(
@@ -398,7 +431,7 @@
 														+ user.status
 														+ "</td><td><button type='button' class='btn btn-danger' onClick='deleteUser("
 														+ user.userId
-														+ ")'>Delete</button><button type='button' class='btn btn-info' onClick='getUser("+ user.userId +")'>Edit</button><button type='button' class='btn btn-info' data-toggle='modal' data-target='#myModal' onClick='getRole("+ user.userId +")'>Edit Role</button>"
+														+ ")'>Delete</button><button type='button' class='btn btn-info' onClick='getUser("+ user.userId +")'>Edit</button><button type='button' class='btn btn-primary' data-toggle='modal' data-target='#myModal' onClick='getRole("+ user.userId +")'>Edit Role</button>"
 														+ "</td></tr>";
 
 												$("table tbody").append(
@@ -412,6 +445,7 @@
 		
 		function listUser() {		
 			var userJSON = JSON.stringify(tsort);
+			
 			$
 					.ajax({
 						url : 'http://localhost:8080/users',userJSON,
@@ -438,7 +472,7 @@
 														+ user.status
 														+ "</td><td><button type='button' class='btn btn-danger' onClick='deleteUser("
 														+ user.userId
-														+ ")'>Delete</button><button type='button' class='btn btn-info' onClick='getUser("+ user.userId +")'>Edit</button><button type='button' class='btn btn-info' data-toggle='modal' data-target='#myModal' onClick='getRole("+ user.userId +")'>Edit Role</button>"
+														+ ")'>Delete</button><button type='button' class='btn btn-info' onClick='getUser("+ user.userId +")'>Edit</button><button type='button' class='btn btn-primary' data-toggle='modal' data-target='#myModal' onClick='getRole("+ user.userId +")'>Edit Role</button>"
 														+ "</td></tr>";
 												$("table tbody").append(
 														tableBody);
@@ -449,23 +483,25 @@
 		}
 		
 
+		
+
 			$("#selectall").click(function () {
 				  $('.case').attr('checked', this.checked);
-				  console.log("aaaaaaa");
+				  
 				  
 			});
+
 			
-			$('.case').click(function(){
-				
+			$("table tbody input.case :checkbox" ).click(function(){
+				console.log("aaaaaaaaa");
 				/* if($(".case").length == $(".case:checked").length) {
 					$("#selectall").attr("checked", "checked");
-					
 				} else {
 					$("#selectall").removeAttr("checked");
-					console.log($("#selectall").removeAttr("checked"));
-				}
- */
+				} */
+
 			});
+		
 		
 	</script>
 </body>
