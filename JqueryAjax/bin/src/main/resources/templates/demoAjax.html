@@ -76,11 +76,11 @@
 						<option value="1">Active</option>
 					</select>
 				</div>
-				<div class="form-group col-md-3" >
-					<label class="checkbox-inline"><input type="checkbox" id="roleId1"
-						value="9">ROLE_ADMIN</label> <label class="checkbox-inline"><input
-						type="checkbox" value="10" id="roleId3">ROLE_PM</label> <label
-						class="checkbox-inline"><input type="checkbox" value="6" id="roleId2">ROLE_USER
+				<div class="form-group col-md-3" id="byRoleId">
+					<label class="checkbox-inline"><input type="checkbox"
+						value="1">ROLE_ADMIN</label> <label class="checkbox-inline"><input
+						type="checkbox" value="2">ROLE_PM</label> <label
+						class="checkbox-inline"><input type="checkbox" value="3">ROLE_USER
 						</label>
 				</div>
 				<div class="form-group col-md-3">
@@ -177,39 +177,22 @@
 	</div>
 	<script type="text/javascript">
 	
-	var tsort={sortName:"",sort:true,fullName:"",pageSize:5,roleId:"",status:"",roleId1:"",roleId2:""};
+	var tsort={sortName:"",sort:true,fullName:"",pageSize:5,roleId:"",status:""};
 	var arrayUserId=[];
 	var roles = [];
-	/* var someObj={};
-	someObj.fruitsGranted=[];
-	someObj.fruitsDenied=[];
-
-	$("input:checkbox").each(function(){
-	    var $this = $(this);
-
-	    if($this.is(":checked")){
-	        someObj.fruitsGranted.push($this.attr("id"));
-	    }else{
-	        someObj.fruitsDenied.push($this.attr("id"));
-	    }
-	}); */
+	
 		$(document).ready(function() {
 			listUser();
 			getRoles();
 			$('#form_id').trigger("reset");	    	
 		});
-		function filter(){		
-			tsort.roleId1=$('#roleId1:checked').val();
-			tsort.roleId2=$('#roleId2:checked').val();
+		function filter(){
 			
-			
-	         /* $(':checkbox:checked').each(function(i){
-	                
-	          tsort.roleId1=$('#roleId1').val();
-	          tsort.roleId2=$('#roleId2').val();
-	        });  */
-	        
-	        
+	       /*  $(':checkbox:checked').each(function(i){
+	          var de = $(this).val();       
+	          
+          
+	        }); */
 	        
 			tsort.status=$('#status').val();
 			tsort.roleId=$('#roleId').val();
@@ -527,11 +510,11 @@
 		         }else {
 	                if ((index = tmp.indexOf($(this).val())) !== -1) {
 	                	tmp.splice(index, 1);
-	                	
+	                	console.log(tmp.indexOf($(this).val()));
 	                }
 	            }		    
 		     });
-		    
+		     console.log(tmp);
 			 });
 			
 			$(document).on('click','.case', function(){				

@@ -1,5 +1,7 @@
 package com.example.demo.utils;
 
+import java.util.List;
+
 public class UserFilterKeyword {
 	private String sortName;
 	private Boolean sort;
@@ -10,7 +12,11 @@ public class UserFilterKeyword {
     private Integer pageNumber;
 	private Integer status;
 	private Integer roleId;
-	private Integer [] roleIds;
+	private List<Integer>  roleIds;
+	public Integer roleId1;
+	public Integer roleId2;
+	private String startDate;
+	private String endDate;
 	public String getSortName() {
 		return sortName;
 	}
@@ -83,12 +89,44 @@ public class UserFilterKeyword {
 		this.roleId = roleId;
 	}
 
-	public Integer[] getRoleIds() {
+	public List<Integer> getRoleIds() {
 		return roleIds;
 	}
 
-	public void setRoleIds(Integer[] roleIds) {
+	public void setRoleIds(List<Integer> roleIds) {
 		this.roleIds = roleIds;
 	}
+
+	public Integer getRoleId1() {
+		return roleId1;
+	}
+
+	public void setRoleId1(Integer roleId1) {
+		this.roleId1 = roleId1;
+	}
+
+	public Integer getRoleId2() {
+		return roleId2;
+	}
+
+	public void setRoleId2(Integer roleId2) {
+		this.roleId2 = roleId2;
+	}
+
+	public String getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
+	}
+
+	public String getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
+	}	
 
 }

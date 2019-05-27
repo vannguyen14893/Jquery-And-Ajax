@@ -1,6 +1,9 @@
 package com.example.demo.service;
 
-import java.util.Arrays;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -16,6 +19,7 @@ import com.example.demo.entity.Role;
 import com.example.demo.entity.User;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.utils.Contants;
 import com.example.demo.utils.UserFilterKeyword;
 
 @Service
@@ -28,15 +32,11 @@ public class UserService {
 	@PersistenceContext
 	EntityManager entityManager;
 	public static final String LIST = "select u from User u ";
-	public static final String SORT = "ORDER BY ";
+	public static final String SORT = " ORDER BY ";
 
 	public List<User> fillAll(UserFilterKeyword filter) {
 		StringBuilder builder = new StringBuilder(LIST);
-		if (filter.getRoleId() != null) {
-			builder.append("join u.roles r ");
-		}
-
-		if (filter.getRoleIds().length > 0) {
+		if (filter.getRoleId() != null ||filter.getRoleId1() != null && filter.getRoleId2() != null ) {
 			builder.append("join u.roles r ");
 		}
 
@@ -45,12 +45,26 @@ public class UserService {
 		if (filter.getRoleId() != null) {
 			builder.append(" AND r.roleId = '" + filter.getRoleId() + "' ");
 		}
-		if (filter.getRoleIds().length > 0) {
-			builder.append(" AND r.roleId in :'(" + Arrays.asList(filter.getRoleIds()) + ")' ");
+		if (filter.getRoleId1() != null && filter.getRoleId2() != null) {
+			builder.append(" AND r.roleId in (" + filter.getRoleId1() + ',' + filter.getRoleId2() + ") ");
 		}
 
 		if (filter.getStatus() != null) {
 			builder.append(" AND u.status = '" + filter.getStatus() + "'");
+		}
+		if (StringUtils.isNotBlank(filter.getStartDate()) && StringUtils.isNotBlank(filter.getEndDate())) {
+			
+			try {
+				DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");		
+			    Date dateStr =  formatter.parse(filter.getStartDate());
+			    Date dateEnd = formatter.parse(filter.getEndDate());
+				builder.append(" AND u.birthDay between '" + formatter.format(dateStr) + " 'and'"
+						+ formatter.format(dateEnd) + "'");
+			} catch (ParseException e) {			
+				e.printStackTrace();
+			}
+			
+ 
 		}
 		if (StringUtils.isNotBlank(filter.getFullName())) {
 			builder.append(" AND LOWER(u.email) like '%" + filter.getFullName().toLowerCase()
