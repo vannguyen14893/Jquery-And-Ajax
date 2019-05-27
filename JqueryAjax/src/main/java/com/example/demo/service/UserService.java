@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -28,16 +29,26 @@ public class UserService {
 	EntityManager entityManager;
 	public static final String LIST = "select u from User u ";
 	public static final String SORT = "ORDER BY ";
+
 	public List<User> fillAll(UserFilterKeyword filter) {
 		StringBuilder builder = new StringBuilder(LIST);
-		if (filter.getRoleId()!=null) {
+		if (filter.getRoleId() != null) {
 			builder.append("join u.roles r ");
-		}	
+		}
+
+		if (filter.getRoleIds().length > 0) {
+			builder.append("join u.roles r ");
+		}
+
 		builder.append(" WHERE 1=1 ");
-		
-		if (filter.getRoleId()!=null) {
+
+		if (filter.getRoleId() != null) {
 			builder.append(" AND r.roleId = '" + filter.getRoleId() + "' ");
 		}
+		if (filter.getRoleIds().length > 0) {
+			builder.append(" AND r.roleId in :'(" + Arrays.asList(filter.getRoleIds()) + ")' ");
+		}
+
 		if (filter.getStatus() != null) {
 			builder.append(" AND u.status = '" + filter.getStatus() + "'");
 		}
@@ -56,29 +67,34 @@ public class UserService {
 		query.setMaxResults(filter.getPageSize());
 		return query.getResultList();
 	}
+
 	public void delete(Integer userId) {
 		repository.deleteById(userId);
 	}
+
 	public void addUser(User user) {
-		User user2=new User();
+		User user2 = new User();
 		user2.setEmail(user.getEmail());
 		user2.setPassword(user.getPassword());
 		repository.save(user2);
 	}
+
 	public User getUser(Integer userId) {
 		return repository.getOne(userId);
 	}
+
 	public void updateUser(User user) {
-		User user2=repository.getOne(user.getUserId());
-		if(user2!=null) {
+		User user2 = repository.getOne(user.getUserId());
+		if (user2 != null) {
 			user2.setUserId(user.getUserId());
 			user2.setEmail(user.getEmail());
 			user2.setPassword(user.getPassword());
 			repository.save(user2);
 		}
 	}
-	public List<Role> fillAllByUserId(){
+
+	public List<Role> fillAllByUserId() {
 		return roleRepository.findAll();
-		
+
 	}
 }

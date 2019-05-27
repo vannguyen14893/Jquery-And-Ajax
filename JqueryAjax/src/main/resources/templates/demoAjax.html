@@ -61,7 +61,7 @@
 		</nav>
 		<form>
 			<div class="row">
-				<div class="form-group col-md-4">
+				<div class="form-group col-md-3">
 					<select class="form-control" id="roleId">
 						<option value="">Choose...</option>
 						<option th:each="role:${roles}" th:value="${role.roleId}"
@@ -69,14 +69,21 @@
 
 					</select>
 				</div>
-				<div class="form-group col-md-4">
+				<div class="form-group col-md-3">
 					<select class="form-control" id="status">
 						<option value="">Choose...</option>
 						<option value="0">InActive</option>
 						<option value="1">Active</option>
 					</select>
 				</div>
-				<div class="form-group col-md-4">
+				<div class="form-group col-md-3" id="byRoleId">
+					<label class="checkbox-inline"><input type="checkbox"
+						value="1">ROLE_ADMIN</label> <label class="checkbox-inline"><input
+						type="checkbox" value="2">ROLE_PM</label> <label
+						class="checkbox-inline"><input type="checkbox" value="3">ROLE_USER
+						</label>
+				</div>
+				<div class="form-group col-md-3">
 					<button type="button" class="btn btn-success" onclick="filter()">Submit</button>
 				</div>
 			</div>
@@ -85,7 +92,7 @@
 		<table class="table table-striped" id="list-user">
 			<thead>
 				<tr>
-             
+
 					<th><input type="checkbox" id="selectall" /></th>
 					<th class="sort">STT<i id="userId" class="fa fa-sort-asc"
 						aria-hidden="true"></i></th>
@@ -151,7 +158,7 @@
 				<div class="modal-body">
 					<form>
 						<div th:each="role: ${roles}">
-							<input class="roleId" type="checkbox" th:value="${role.roleId}" >
+							<input class="roleId" type="checkbox" th:value="${role.roleId}">
 							<span th:text="${role.name}"></span>
 						</div>
 
@@ -171,7 +178,7 @@
 	<script type="text/javascript">
 	
 	var tsort={sortName:"",sort:true,fullName:"",pageSize:5,roleId:"",status:""};
-	
+	var arrayUserId=[];
 	var roles = [];
 	
 		$(document).ready(function() {
@@ -179,10 +186,18 @@
 			getRoles();
 			$('#form_id').trigger("reset");	    	
 		});
-		function filter(){	
+		function filter(){
+			
+	       /*  $(':checkbox:checked').each(function(i){
+	          var de = $(this).val();       
+	          
+          
+	        }); */
+	        
 			tsort.status=$('#status').val();
 			tsort.roleId=$('#roleId').val();
-			console.log(tsort.status);
+			
+			
 			var userJSON = JSON.stringify(tsort);
 			$
 					.ajax({
@@ -287,13 +302,16 @@
 				}
 			})				
 		}
+		function checkAllCheckBox(userId){
+			
+		}
 		function getRoles(userId){
 			$.ajax({
 				url:'http://localhost:8080/list-role',
 				method:'GET',
 				contentType : "application/json; charset=utf-8",
 				success:function(data){
-					console.log(data);
+					
 										
 				}
 			})				
@@ -456,7 +474,7 @@
 							$(data)
 									.each(
 											function(index, user) {	
-												var tableBody = "<tr><td>" + "<input type='checkbox' class='case'  value=" + user.userId + ">" + "</td><td>"
+												var tableBody = "<tr><td>" + "<input type='checkbox' class='case' value=" + user.userId + ">" + "</td><td>"
 														+ user.userId
 														+ "</td><td>"
 														+ user.fullName
@@ -483,25 +501,35 @@
 		}
 		
 
-		
-
 			$("#selectall").click(function () {
-				  $('.case').attr('checked', this.checked);
-				  
-				  
-			});
-
+			$('.case').not(this).prop('checked', this.checked);	
+			 var tmp = [];              
+		     $('.case').each(function(){
+		    	 if ($(this).is(':checked')) {
+		    		 tmp.push($(this).val());	            	     
+		         }else {
+	                if ((index = tmp.indexOf($(this).val())) !== -1) {
+	                	tmp.splice(index, 1);
+	                	console.log(tmp.indexOf($(this).val()));
+	                }
+	            }		    
+		     });
+		     console.log(tmp);
+			 });
 			
-			$("table tbody input.case :checkbox" ).click(function(){
-				console.log("aaaaaaaaa");
-				/* if($(".case").length == $(".case:checked").length) {
-					$("#selectall").attr("checked", "checked");
+			$(document).on('click','.case', function(){				
+				var a = $(".case").length; 
+				var b = $(".case:checked").length;
+			    var c=$(this).val();	   
+				if(a === b) {
+					$("#selectall").attr("checked", "checked");		
 				} else {
 					$("#selectall").removeAttr("checked");
-				} */
-
-			});
-		
+				} 
+				
+			 });
+			
+			
 		
 	</script>
 </body>

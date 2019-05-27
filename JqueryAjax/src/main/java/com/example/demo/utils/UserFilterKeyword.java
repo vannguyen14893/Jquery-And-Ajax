@@ -10,6 +10,7 @@ public class UserFilterKeyword {
     private Integer pageNumber;
 	private Integer status;
 	private Integer roleId;
+	private Integer [] roleIds;
 	public String getSortName() {
 		return sortName;
 	}
@@ -80,6 +81,14 @@ public class UserFilterKeyword {
 
 	public void setRoleId(Integer roleId) {
 		this.roleId = roleId;
+	}
+
+	public Integer[] getRoleIds() {
+		return roleIds;
+	}
+
+	public void setRoleIds(Integer[] roleIds) {
+		this.roleIds = roleIds;
 	}
 
 }
