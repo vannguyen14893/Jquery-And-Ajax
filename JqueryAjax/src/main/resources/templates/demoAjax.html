@@ -76,12 +76,12 @@
 						<option value="1">Active</option>
 					</select>
 				</div>
-				<div class="form-group col-md-3" >
-					<label class="checkbox-inline"><input type="checkbox" id="roleId1"
-						value="9">ROLE_ADMIN</label> <label class="checkbox-inline"><input
-						type="checkbox" value="10" id="roleId3">ROLE_PM</label> <label
-						class="checkbox-inline"><input type="checkbox" value="6" id="roleId2">ROLE_USER
-						</label>
+				<div class="form-group col-md-3">
+					<label class="checkbox-inline"><input type="checkbox"
+						id="roleId1" value="1">ROLE_ADMIN</label> <label
+						class="checkbox-inline"><input type="checkbox" value="10"
+						id="roleId3">ROLE_PM</label> <label class="checkbox-inline"><input
+						type="checkbox" value="2" id="roleId2">ROLE_USER </label>
 				</div>
 				<div class="form-group col-md-3">
 					<button type="button" class="btn btn-success" onclick="filter()">Submit</button>
@@ -157,10 +157,7 @@
 				<!-- Modal body -->
 				<div class="modal-body">
 					<form>
-						<div th:each="role: ${roles}">
-							<input class="roleId" type="checkbox" th:value="${role.roleId}">
-							<span th:text="${role.name}"></span>
-						</div>
+						<div id="list-role"></div>
 
 						<button type="button" onclick="addUser()">Save</button>
 					</form>
@@ -180,6 +177,7 @@
 	var tsort={sortName:"",sort:true,fullName:"",pageSize:5,roleId:"",status:"",roleId1:"",roleId2:""};
 	var arrayUserId=[];
 	var roles = [];
+	var listRole={};
 	/* var someObj={};
 	someObj.fruitsGranted=[];
 	someObj.fruitsDenied=[];
@@ -291,20 +289,7 @@
                })       	   
            }         
 		}
-		function getRole(userId){			
-			 $.ajax({
-				url:'http://localhost:8080/get-user/' + userId,
-				method:'GET',
-				contentType : "application/json; charset=utf-8",
-				success:function(data){
-					for(let i=0;i<data.roles.length;i++){
-						console.log(data.roles[i].roleId);
-						$(".roleId").val(data.roles[i].roleId);
-					}
-										
-				}
-			})				
-		}
+		
 		
 		function getUser(userId){
 			$.ajax({
@@ -319,20 +304,48 @@
 				}
 			})				
 		}
-		function checkAllCheckBox(userId){
-			
-		}
-		function getRoles(userId){
+	
+		function getRoles(){
 			$.ajax({
 				url:'http://localhost:8080/list-role',
 				method:'GET',
 				contentType : "application/json; charset=utf-8",
 				success:function(data){
 					
-										
+					$(data).each(function(index,role){
+						var modalBody="<tr><td>" + 
+						"<input type='checkbox' value=" + role.roleId + " class='role'>" +
+						"<span>" +  role.name + "</span>" + 
+						"</td></tr>"
+						$("#list-role").append(
+								modalBody);
+					})					
 				}
 			})				
 		}
+		function getRole(userId){
+			
+			 $.ajax({
+				url:'http://localhost:8080/get-user/' + userId,
+				method:'GET',
+				contentType : "application/json; charset=utf-8",
+				success:function(data){	
+				$('#list-role input:checkbox').each(function () {
+				listRole.id = (!this.checked ? $(this).val() : "");
+									
+				for(let i=0;i<data.roles.length;i++){						
+					if(data.roles[i].roleId=listRole.id){	
+						console.log(listRole.id);	
+						$('#list-role input:checkbox').prop('checked', true);
+						
+					    }																 				
+				   }
+									 
+				});
+			 }
+			})				
+		}
+		
 		function deleteUser(userId) {
 			$.ajax({
 				url : 'http://localhost:8080/delete/' + userId,

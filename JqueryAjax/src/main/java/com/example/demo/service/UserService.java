@@ -19,7 +19,6 @@ import com.example.demo.entity.Role;
 import com.example.demo.entity.User;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.utils.Contants;
 import com.example.demo.utils.UserFilterKeyword;
 
 @Service
@@ -62,8 +61,7 @@ public class UserService {
 						+ formatter.format(dateEnd) + "'");
 			} catch (ParseException e) {			
 				e.printStackTrace();
-			}
-			
+			}		
  
 		}
 		if (StringUtils.isNotBlank(filter.getFullName())) {
@@ -87,7 +85,7 @@ public class UserService {
 	}
 
 	public void addUser(User user) {
-		User user2 = new User();
+		User user2 = new User();	  
 		user2.setEmail(user.getEmail());
 		user2.setPassword(user.getPassword());
 		repository.save(user2);
