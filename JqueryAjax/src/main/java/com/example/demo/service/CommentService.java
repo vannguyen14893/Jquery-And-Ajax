@@ -68,7 +68,6 @@ public class CommentService {
 			for (Comment comment2 : comments) {
 				repository.delete(comment2);
 			}
-
 			repository.delete(comment);
 		}
 	}
