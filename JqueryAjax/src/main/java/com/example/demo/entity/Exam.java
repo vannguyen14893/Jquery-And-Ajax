@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -22,6 +23,8 @@ public class Exam implements Serializable {
 	private String name;
 	private String title;
 	private String time;
+	@Column(name="total_question")
+	private Integer totalQuestion;
 	@OneToMany(mappedBy = "exam", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Test> tests = new ArrayList<Test>();
 	@OneToMany(mappedBy = "exam", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -73,6 +76,14 @@ public class Exam implements Serializable {
 
 	public void setQuestions(List<Question> questions) {
 		this.questions = questions;
+	}
+
+	public Integer getTotalQuestion() {
+		return totalQuestion;
+	}
+
+	public void setTotalQuestion(Integer totalQuestion) {
+		this.totalQuestion = totalQuestion;
 	}
 
 	public Exam(Integer id, String name, String title, String time, List<Test> tests, List<Question> questions) {
