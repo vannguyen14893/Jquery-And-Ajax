@@ -23,11 +23,11 @@ public class Question implements Serializable {
 	private Integer id;
 	private String name;
 	private Integer status;
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "question" ,fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Answer> answers=new ArrayList<Answer>();
 	@ManyToOne
-	@JoinColumn(name = "exam_id")
-	private Exam exam;
+	@JoinColumn(name = "test_id")
+	private Test test;
 
 	public Integer getId() {
 		return id;
@@ -61,21 +61,21 @@ public class Question implements Serializable {
 		this.answers = answers;
 	}
 
-	public Exam getExam() {
-		return exam;
+	public Test getTest() {
+		return test;
 	}
 
-	public void setExam(Exam exam) {
-		this.exam = exam;
+	public void setTest(Test test) {
+		this.test = test;
 	}
 
-	public Question(Integer id, String name, Integer status, List<Answer> answers, Exam exam) {
+	public Question(Integer id, String name, Integer status, List<Answer> answers) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.status = status;
 		this.answers = answers;
-		this.exam = exam;
+		
 	}
 
 	public Question() {

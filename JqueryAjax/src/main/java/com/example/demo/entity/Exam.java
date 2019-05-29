@@ -27,9 +27,6 @@ public class Exam implements Serializable {
 	private Integer totalQuestion;
 	@OneToMany(mappedBy = "exam", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Test> tests = new ArrayList<Test>();
-	@OneToMany(mappedBy = "exam", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Question> questions = new ArrayList<Question>();
-
 	public Integer getId() {
 		return id;
 	}
@@ -70,14 +67,7 @@ public class Exam implements Serializable {
 		this.tests = tests;
 	}
 
-	public List<Question> getQuestions() {
-		return questions;
-	}
-
-	public void setQuestions(List<Question> questions) {
-		this.questions = questions;
-	}
-
+	
 	public Integer getTotalQuestion() {
 		return totalQuestion;
 	}
@@ -93,7 +83,7 @@ public class Exam implements Serializable {
 		this.title = title;
 		this.time = time;
 		this.tests = tests;
-		this.questions = questions;
+		
 	}
 
 	public Exam() {

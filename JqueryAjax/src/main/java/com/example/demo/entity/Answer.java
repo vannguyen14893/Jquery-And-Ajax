@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Answer implements Serializable {
@@ -18,7 +20,9 @@ public class Answer implements Serializable {
 	private String name;
 	@Column(name = "is_true")
 	private boolean isTrue;
-
+	@ManyToOne
+	@JoinColumn(name = "question_id")
+	private Question question;
 	public Integer getId() {
 		return id;
 	}
@@ -41,6 +45,14 @@ public class Answer implements Serializable {
 
 	public void setTrue(boolean isTrue) {
 		this.isTrue = isTrue;
+	}
+
+	public Question getQuestion() {
+		return question;
+	}
+
+	public void setQuestion(Question question) {
+		this.question = question;
 	}
 
 	public Answer(Integer id, String name, boolean isTrue) {
