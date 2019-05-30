@@ -25,6 +25,7 @@ public class Answer implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "question_id")
 	private Question question;
+	private Integer mark;
 	public Integer getId() {
 		return id;
 	}
@@ -62,6 +63,14 @@ public class Answer implements Serializable {
 		this.id = id;
 		this.name = name;
 		this.isTrue = isTrue;
+	}
+
+	public Integer getMark() {
+		return mark;
+	}
+
+	public void setMark(Integer mark) {
+		this.mark = mark;
 	}
 
 	public Answer() {

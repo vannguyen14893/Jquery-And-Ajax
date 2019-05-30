@@ -24,4 +24,8 @@ public class TestController {
 	public Test getTest(@PathVariable("testId") Integer testId) {
 		return service.getTest(testId);
 	}
+	@PostMapping(value="/test/mark/{testId}")
+	public void test(@PathVariable("testId") Integer testId,@RequestBody Test test) {
+		service.mark(test);
+	}
 }

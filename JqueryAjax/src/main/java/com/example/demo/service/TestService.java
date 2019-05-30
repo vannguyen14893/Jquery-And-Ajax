@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -45,9 +44,11 @@ public class TestService {
 		if (StringUtils.isNotBlank(type)) {
 			builder.append(" AND q.type= '" + type + "' ");
 		}
+
 		if (StringUtils.isNotBlank(level)) {
 			builder.append(" AND q.level= '" + level + "' ");
 		}
+
 		List<Question> questions = entityManager.createQuery(builder.toString(), Question.class).getResultList();
 		List<Question> randomSeries = questions.subList(0, numberRandomQuestion);
 		Collections.shuffle(questions);
@@ -55,8 +56,9 @@ public class TestService {
 		for (Question question : randomSeries) {
 			List<Answer> answers = question.getAnswers();
 			Collections.shuffle(answers);
-			answers.forEach(item->System.out.println(item.getId()));
+			answers.forEach(item -> System.out.println(item.getId()));
 		}
+
 		test.setQuestions(randomSeries);
 		test.setExam(examRepository.getOne(test.getExam().getId()));
 		testRepository.save(test);
@@ -66,4 +68,22 @@ public class TestService {
 		return testRepository.getOne(testId);
 	}
 
+	public void mark(Test test) {
+		Test test2 = testRepository.getOne(test.getId());
+		List<Question> questions = test2.getQuestions();
+		for (Question question : questions) {
+			List<Answer> answers = question.getAnswers();
+			List<Answer> answers2 = answerRepository.findByIsTrueTrueAndQuestion_Id(question.getId());
+			for (Answer answer : answers) {
+				for (Answer answer2 : answers2) {
+                  if(answer.getId()==answer2.getId()) {
+                	  answer.setMark(+1);
+                  }else {
+                	  
+                  }
+				}
+			}
+		}
+		
+	}
 }
