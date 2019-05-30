@@ -10,9 +10,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 public class Question implements Serializable {
@@ -23,11 +24,13 @@ public class Question implements Serializable {
 	private Integer id;
 	private String name;
 	private Integer status;
+	private String type;
+	private String level;
 	@OneToMany(mappedBy = "question" ,fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Answer> answers=new ArrayList<Answer>();
-	@ManyToOne
-	@JoinColumn(name = "test_id")
-	private Test test;
+	@ManyToMany(mappedBy = "questions",fetch = FetchType.LAZY)
+	@JsonIgnoreProperties("questions")
+	private List<Test> tests=new ArrayList<Test>();
 
 	public Integer getId() {
 		return id;
@@ -61,12 +64,28 @@ public class Question implements Serializable {
 		this.answers = answers;
 	}
 
-	public Test getTest() {
-		return test;
+	public List<Test> getTests() {
+		return tests;
 	}
 
-	public void setTest(Test test) {
-		this.test = test;
+	public void setTests(List<Test> tests) {
+		this.tests = tests;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getLevel() {
+		return level;
+	}
+
+	public void setLevel(String level) {
+		this.level = level;
 	}
 
 	public Question(Integer id, String name, Integer status, List<Answer> answers) {

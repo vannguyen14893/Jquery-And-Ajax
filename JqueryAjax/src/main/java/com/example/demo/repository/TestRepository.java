@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.demo.entity.Test;
 
-public interface TestRepsository extends JpaRepository<Test, Integer> {
+public interface TestRepository extends JpaRepository<Test, Integer> {
 	List<Test> findByExam_Id(Integer examId);
 }

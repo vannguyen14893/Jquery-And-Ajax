@@ -13,6 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 public class Exam implements Serializable {
 
@@ -26,6 +28,7 @@ public class Exam implements Serializable {
 	@Column(name="total_question")
 	private Integer totalQuestion;
 	@OneToMany(mappedBy = "exam", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnoreProperties("exam")
 	private List<Test> tests = new ArrayList<Test>();
 	public Integer getId() {
 		return id;
