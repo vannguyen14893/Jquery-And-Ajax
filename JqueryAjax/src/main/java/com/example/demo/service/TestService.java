@@ -33,9 +33,22 @@ public class TestService {
 	@PersistenceContext
 	private EntityManager entityManager;
 	public static final String SQL = "select q from Question q ";
+	Test test0 = null;
 
 	public List<Test> findByExamId(Integer examId) {
 		return testRepository.findByExam_Id(examId);
+	}
+
+	public void selectListQuestion(String type, String level, List<Question> questions) {
+		StringBuilder builder = new StringBuilder(SQL);
+		builder.append(" WHERE 1=1 ");
+		if (StringUtils.isNotBlank(type)) {
+			builder.append(" AND q.type= '" + type + "' ");
+		}
+
+		if (StringUtils.isNotBlank(level)) {
+			builder.append(" AND q.level= '" + level + "' ");
+		}
 	}
 
 	public void createTest(String type, String level, Integer numberRandomQuestion, Test test) {
@@ -48,14 +61,17 @@ public class TestService {
 		if (StringUtils.isNotBlank(level)) {
 			builder.append(" AND q.level= '" + level + "' ");
 		}
-
+        
 		List<Question> questions = entityManager.createQuery(builder.toString(), Question.class).getResultList();
+		
 		List<Question> randomSeries = questions.subList(0, numberRandomQuestion);
-		Collections.shuffle(questions);
-
+		
+		Collections.shuffle(randomSeries);
 		for (Question question : randomSeries) {
+		
 			List<Answer> answers = question.getAnswers();
 			Collections.shuffle(answers);
+			question.setAnswers(answers);
 			answers.forEach(item -> System.out.println(item.getId()));
 		}
 
@@ -76,14 +92,15 @@ public class TestService {
 			List<Answer> answers2 = answerRepository.findByIsTrueTrueAndQuestion_Id(question.getId());
 			for (Answer answer : answers) {
 				for (Answer answer2 : answers2) {
-                  if(answer.getId()==answer2.getId()) {
-                	  answer.setMark(+1);
-                  }else {
-                	  
-                  }
+					if (answer.getId() == answer2.getId()) {
+						answer.setMark(+1);
+
+					} else {
+
+					}
 				}
 			}
 		}
-		
+
 	}
 }

@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -41,6 +43,10 @@ public class User implements Serializable {
 
 	private int status;
 	private String avatar;
+	@Embedded
+	private Address address;
+	@ElementCollection
+	private List<Image> images=new ArrayList<Image>();
 	@Column(name="birth_day")
 	@Temporal(TemporalType.DATE)
 	private Date birthDay;
@@ -127,6 +133,22 @@ public class User implements Serializable {
 
 	public void setBirthDay(Date birthDay) {
 		this.birthDay = birthDay;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
+	public List<Image> getImages() {
+		return images;
+	}
+
+	public void setImages(List<Image> images) {
+		this.images = images;
 	}
 
 }

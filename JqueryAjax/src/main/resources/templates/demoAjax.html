@@ -106,6 +106,7 @@
 						class="fa fa-sort-asc" aria-hidden="true"></i></th>
 					<th class="sort">Phone<i id="phone" class="fa fa-sort-asc"
 						aria-hidden="true"></i></th>
+						<th>Address</th>
 					<th class="sort">Status<i id="status" class="fa fa-sort-asc"
 						aria-hidden="true"></i></th>
 					<th>Action</th>
@@ -503,7 +504,8 @@
 						success : function(data) {
 							$(data)
 									.each(
-											function(index, user) {	
+											function(index, user) {
+												let images=user.images;
 												var tableBody = "<tr><td>" + "<input type='checkbox' class='case' value=" + user.userId + ">" + "</td><td>"
 														+ user.userId
 														+ "</td><td>"
@@ -516,7 +518,10 @@
 														+ user.password
 														+ "</td><td>"
 														+ user.phone
-														+ "</td><td>"
+														+ "</td><td>"+
+														user.address.nameAddress
+													
+														+"</td><td>"
 														+ user.status
 														+ "</td><td><button type='button' class='btn btn-danger' onClick='deleteUser("
 														+ user.userId
@@ -524,8 +529,8 @@
 														+ "</td></tr>";
 												$("table tbody").append(
 														tableBody);
-
-											})
+												});
+											
 						}
 					})
 		}

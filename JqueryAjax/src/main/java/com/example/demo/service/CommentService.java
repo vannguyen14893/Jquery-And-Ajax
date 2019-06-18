@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +18,18 @@ public class CommentService {
 	private CommentRepository repository;
 	@Autowired
 	private UserRepository userRepository;
+
+	public List<Comment> fillAll() {
+		List<Comment> comments = new ArrayList<Comment>();
+		List<Comment> commentDad = repository.findByParentId(0);
+		for (Comment comment : commentDad) {
+			comments.add(comment);
+			List<Comment> commentsChild = repository.findByParentId(comment.getId());
+			comments.addAll(commentsChild);
+		}
+		return comments;
+	}
+
 
 	public void addComment(Comment comment) {
 		comment.setParentId(0);
