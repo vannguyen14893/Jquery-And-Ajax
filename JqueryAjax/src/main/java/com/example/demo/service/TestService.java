@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -71,8 +72,10 @@ public class TestService {
 		
 			List<Answer> answers = question.getAnswers();
 			Collections.shuffle(answers);
+
 			question.setAnswers(answers);
 			answers.forEach(item -> System.out.println(item.getId()));
+
 		}
 
 		test.setQuestions(randomSeries);
@@ -82,6 +85,17 @@ public class TestService {
 
 	public Test getTest(Integer testId) {
 		return testRepository.getOne(testId);
+	}
+
+	@SuppressWarnings("unlikely-arg-type")
+	public void creatTest(Test test) {
+		List<Question> questions = new ArrayList<Question>();
+		for (int i = 0; i < test.getQuestions().size(); i++) {
+			questions.add(questionRepository.getOne(test.getQuestions().indexOf(i)));
+		}
+		test.setQuestions(questions);
+		test.setExam(examRepository.getOne(test.getExam().getId()));
+		testRepository.save(test);
 	}
 
 	public void mark(Test test) {
