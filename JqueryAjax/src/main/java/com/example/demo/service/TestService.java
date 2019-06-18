@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -56,7 +57,7 @@ public class TestService {
 		for (Question question : randomSeries) {
 			List<Answer> answers = question.getAnswers();
 			Collections.shuffle(answers);
-			answers.forEach(item -> System.out.println(item.getId()));
+
 		}
 
 		test.setQuestions(randomSeries);
@@ -68,6 +69,17 @@ public class TestService {
 		return testRepository.getOne(testId);
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
+	public void creatTest(Test test) {
+		List<Question> questions = new ArrayList<Question>();
+		for (int i = 0; i < test.getQuestions().size(); i++) {
+			questions.add(questionRepository.getOne(test.getQuestions().indexOf(i)));
+		}
+		test.setQuestions(questions);
+		test.setExam(examRepository.getOne(test.getExam().getId()));
+		testRepository.save(test);
+	}
+
 	public void mark(Test test) {
 		Test test2 = testRepository.getOne(test.getId());
 		List<Question> questions = test2.getQuestions();
@@ -76,14 +88,14 @@ public class TestService {
 			List<Answer> answers2 = answerRepository.findByIsTrueTrueAndQuestion_Id(question.getId());
 			for (Answer answer : answers) {
 				for (Answer answer2 : answers2) {
-                  if(answer.getId()==answer2.getId()) {
-                	  answer.setMark(+1);
-                  }else {
-                	  
-                  }
+					if (answer.getId() == answer2.getId()) {
+						answer.setMark(+1);
+					} else {
+
+					}
 				}
 			}
 		}
-		
+
 	}
 }
